@@ -1,0 +1,16 @@
+{
+  "name": "kumbh-2027-app",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "services/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build"
+  },
+  "packageManager": "npm@10.0.0",
+  "devDependencies": {
+    "turbo": "latest"
+  }
+}
