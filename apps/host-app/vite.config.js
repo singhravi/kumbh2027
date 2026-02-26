@@ -8,7 +8,7 @@ export default defineConfig({
     federation({
       name: 'host_app',
       remotes: {
-        map_mfe: 'http://localhost:5001/assets/remoteEntry.js',
+        map_mfe: `http://localhost:5001/assets/remoteEntry.js?t=${Date.now()}`,
       },
       shared: ['react', 'react-dom']
     })
@@ -16,6 +16,7 @@ export default defineConfig({
   server: {
     port: 5005,
     strictPort: true,
+    allowedHosts: true,
   },
   build: {
     modulePreload: false,

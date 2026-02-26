@@ -10,6 +10,9 @@ export default defineConfig({
       filename: 'remoteEntry.js',
       exposes: {
         './FederatedMap': './src/FederatedMap.jsx',
+        './ParkingArea': './src/ParkingArea.jsx',
+        './LaserShow': './src/LaserShow.jsx',
+        './AkharaRegistration': './src/AkharaRegistration.jsx'
       },
       shared: ['react', 'react-dom']
     })
@@ -19,5 +22,8 @@ export default defineConfig({
     target: 'esnext',
     minify: false,
     cssCodeSplit: false
+  },
+  server: {
+    cors: true,
   }
 })

@@ -31,6 +31,46 @@ export default function InfoModal({ place, onClose }) {
 
                 <p className="modal-desc">{place.description}</p>
 
+                <div className="status-badges" style={{ display: 'flex', gap: '10px', marginTop: '10px', marginBottom: '15px' }}>
+                    {place.crowdLevel && (
+                        <span className="badge crowd-badge" style={{
+                            backgroundColor: place.crowdLevel === 'Low' ? '#10b981' : place.crowdLevel === 'Moderate' ? '#f59e0b' : '#ef4444',
+                            color: 'white', padding: '4px 8px', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold', border: 'none'
+                        }}>
+                            👥 Crowd: {place.crowdLevel}
+                        </span>
+                    )}
+                    {place.trafficCondition && (
+                        <span className="badge traffic-badge" style={{
+                            backgroundColor: place.trafficCondition === 'Clear' ? '#10b981' : place.trafficCondition === 'Moderate' ? '#f59e0b' : '#ef4444',
+                            color: 'white', padding: '4px 8px', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold', border: 'none'
+                        }}>
+                            🚗 Traffic: {place.trafficCondition}
+                        </span>
+                    )}
+                </div>
+
+                {place.trafficCondition === 'Heavy' && place.alternateRouteMap && (
+                    <div className="alternate-route" style={{ marginBottom: '15px', padding: '10px', backgroundColor: '#fff3cd', border: '1px solid #ffeeba', borderRadius: '8px' }}>
+                        <strong style={{ color: '#856404', display: 'block', marginBottom: '5px' }}>⚠️ Heavy Traffic Alert</strong>
+                        <p style={{ margin: '0 0 10px 0', fontSize: '13px', color: '#856404' }}>Consider using this alternate route to avoid delays.</p>
+                        {place.alternateRouteMap.includes('google.com/maps/embed') ? (
+                            <iframe
+                                src={place.alternateRouteMap}
+                                width="100%"
+                                height="200"
+                                style={{ border: 0, borderRadius: '6px' }}
+                                allowFullScreen=""
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                                title={`Alternate route for ${place.name}`}>
+                            </iframe>
+                        ) : (
+                            <img src={place.alternateRouteMap} alt={`Alternate Route for ${place.name}`} style={{ width: '100%', borderRadius: '6px' }} />
+                        )}
+                    </div>
+                )}
+
                 {loading ? (
                     <div className="loading">Loading Immersive AI Experience...</div>
                 ) : isVirtualDipActive ? (
