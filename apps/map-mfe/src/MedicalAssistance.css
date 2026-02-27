@@ -1,0 +1,303 @@
+.medical-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    font-family: inherit;
+    color: #334155;
+    background: #f8fafc;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.medical-header {
+    background: #dc2626;
+    /* Red primary for medical/emergency */
+    color: white;
+    padding: 25px 30px;
+    text-align: center;
+}
+
+.medical-header h2 {
+    margin: 0 0 5px 0;
+    font-size: 1.8rem;
+    letter-spacing: 0.5px;
+}
+
+.medical-header p {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* Navigation Tabs */
+.medical-nav {
+    display: flex;
+    background: white;
+    padding: 0;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.nav-btn {
+    flex: 1;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #64748b;
+    background: transparent;
+    border: none;
+    border-bottom: 4px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.nav-btn:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.nav-btn.active-red {
+    color: #dc2626;
+    border-bottom-color: #dc2626;
+    background: #fef2f2;
+}
+
+.nav-btn.active-blue {
+    color: #2563eb;
+    border-bottom-color: #2563eb;
+    background: #eff6ff;
+}
+
+.nav-btn.active-green {
+    color: #059669;
+    border-bottom-color: #059669;
+    background: #ecfdf5;
+}
+
+.tab-description {
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 25px;
+    font-size: 1.05rem;
+}
+
+.medical-content {
+    padding: 30px;
+}
+
+/* SOS Contacts Styling */
+.sos-banner {
+    background: #fee2e2;
+    border: 2px solid #ef4444;
+    color: #991b1b;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.sos-banner h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.contacts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.contact-card {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.contact-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+    border-color: #cbd5e1;
+}
+
+.contact-icon {
+    font-size: 2.5rem;
+    margin-right: 15px;
+}
+
+.contact-info {
+    flex-grow: 1;
+}
+
+.contact-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    color: #475569;
+}
+
+.contact-number {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #dc2626;
+    letter-spacing: 1px;
+}
+
+.call-action {
+    background: #f1f5f9;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #2563eb;
+}
+
+.contact-card:hover .call-action {
+    background: #dbeafe;
+}
+
+/* Hospitals Styling */
+.zone-cluster {
+    margin-bottom: 35px;
+}
+
+.zone-title {
+    color: #1e293b;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.camps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.camp-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 5px solid #3b82f6;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.camp-card h4 {
+    margin: 0 0 5px 0;
+    font-size: 1.2rem;
+    color: #0f172a;
+}
+
+.camp-type {
+    display: inline-block;
+    background: #eff6ff;
+    color: #1d4ed8;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.camp-details p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+}
+
+.camp-details a {
+    color: #2563eb;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.navigate-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    border-radius: 6px;
+    font-weight: bold;
+    color: #475569;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.navigate-btn:hover {
+    background: #e2e8f0;
+}
+
+/* First Aid Styling */
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+.tip-card {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e2e8f0;
+    position: relative;
+    overflow: hidden;
+}
+
+.tip-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #10b981;
+}
+
+.tip-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.tip-icon {
+    font-size: 2rem;
+    margin-right: 15px;
+    background: #ecfdf5;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.tip-card h3 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 1.3rem;
+}
+
+.tip-steps {
+    padding-left: 20px;
+    margin: 0;
+    color: #475569;
+    line-height: 1.6;
+}
+
+.tip-steps li {
+    margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+    .medical-nav {
+        flex-direction: column;
+    }
+
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+}

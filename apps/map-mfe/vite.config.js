@@ -12,7 +12,12 @@ export default defineConfig({
         './FederatedMap': './src/FederatedMap.jsx',
         './ParkingArea': './src/ParkingArea.jsx',
         './LaserShow': './src/LaserShow.jsx',
-        './AkharaRegistration': './src/AkharaRegistration.jsx'
+        './AkharaRegistration': './src/AkharaRegistration.jsx',
+        './LostAndFound': './src/LostAndFound.jsx',
+        './WorkerRegistration': './src/WorkerRegistration.jsx',
+        './FacilitiesLayout': './src/FacilitiesLayout.jsx',
+        './FoodVendorRegistration': './src/FoodVendorRegistration.jsx',
+        './MedicalAssistance': './src/MedicalAssistance.jsx'
       },
       shared: ['react', 'react-dom']
     })

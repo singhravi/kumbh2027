@@ -1,0 +1,524 @@
+.worker-reg-container {
+    background-color: #f0fdf4;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    color: #1e293b;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.worker-header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #bbf7d0;
+    padding-bottom: 20px;
+}
+
+.worker-header h2 {
+    color: #15803d;
+    margin: 0 0 10px 0;
+    font-size: 2.2rem;
+}
+
+.worker-header p {
+    color: #166534;
+    font-weight: 600;
+    margin: 0;
+}
+
+.worker-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.form-panel {
+    flex: 1;
+    min-width: 350px;
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.form-panel h3 {
+    margin-top: 0;
+    color: #15803d;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.worker-form .form-group {
+    margin-bottom: 15px;
+}
+
+.worker-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #475569;
+    font-size: 0.9rem;
+}
+
+.worker-form input,
+.worker-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    background: #f8fafc;
+    color: #0f172a;
+    /* Explicit color for text visibility */
+}
+
+.worker-form input:focus,
+.worker-form select:focus {
+    outline: none;
+    border-color: #22c55e;
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-group.half {
+    flex: 1;
+}
+
+.btn-primary {
+    width: 100%;
+    background: #16a34a;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 1.1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background: #15803d;
+}
+
+.status-message {
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.status-message.success {
+    background: #dcfce7;
+    color: #166534;
+    border-left: 4px solid #16a34a;
+}
+
+.status-message.error {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-left: 4px solid #ef4444;
+}
+
+/* ID Pass Panel */
+.pass-panel {
+    flex: 1;
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.pass-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.pass-actions h3 {
+    margin: 0;
+    color: #1e293b;
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-secondary {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-outline {
+    background: transparent;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-secondary:hover {
+    background: #2563eb;
+}
+
+.btn-outline:hover {
+    background: #f1f5f9;
+}
+
+/* The actual ID Card generated */
+.id-card-wrapper {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+}
+
+.id-card {
+    width: 350px;
+    border: 2px solid #16a34a;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.id-card::before {
+    content: "SWACHH KUMB";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 3rem;
+    color: rgba(34, 197, 94, 0.05);
+    white-space: nowrap;
+    z-index: 0;
+    pointer-events: none;
+    font-weight: 900;
+}
+
+.id-header {
+    background: #15803d;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.logo-placeholder {
+    font-size: 1.8rem;
+}
+
+.id-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.2;
+}
+
+.id-header h3 span {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: #bbf7d0;
+}
+
+.id-title {
+    background: #f59e0b;
+    color: #78350f;
+    font-weight: 900;
+    padding: 5px;
+    margin-top: 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+}
+
+.id-body {
+    padding: 15px;
+    display: flex;
+    gap: 15px;
+    position: relative;
+    z-index: 1;
+}
+
+.photo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100px;
+}
+
+.photo-box {
+    width: 90px;
+    height: 110px;
+    border: 2px dashed #cbd5e1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    color: #94a3b8;
+}
+
+.photo-icon {
+    font-size: 2.5rem;
+}
+
+.worker-id-badge {
+    background: #1e293b;
+    color: white;
+    font-size: 0.8rem;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}
+
+.details-section {
+    flex: 1;
+}
+
+.worker-name {
+    margin: 0 0 10px 0;
+    color: #1e293b;
+    font-size: 1.3rem;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 5px;
+}
+
+.details-table {
+    width: 100%;
+    font-size: 0.85rem;
+    border-collapse: collapse;
+}
+
+.details-table td {
+    padding: 4px 0;
+    vertical-align: top;
+}
+
+.details-table td:first-child {
+    color: #64748b;
+    width: 45%;
+}
+
+.details-table td:last-child {
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.highlight-zone {
+    color: #16a34a !important;
+    font-size: 0.95rem;
+}
+
+.blood-group {
+    color: #ef4444 !important;
+    font-weight: bold;
+}
+
+.id-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    font-size: 0.75rem;
+    position: relative;
+    z-index: 1;
+}
+
+.validity p {
+    margin: 2px 0;
+    color: #475569;
+}
+
+.signature {
+    text-align: center;
+}
+
+.sig-line {
+    width: 80px;
+    height: 1px;
+    background: #94a3b8;
+    margin-bottom: 5px;
+    margin-top: 15px;
+}
+
+.signature p {
+    margin: 0;
+    color: #64748b;
+    font-weight: bold;
+}
+
+.id-warning {
+    background: #ef4444;
+    color: white;
+    font-size: 0.6rem;
+    text-align: center;
+    padding: 5px;
+    line-height: 1.2;
+}
+
+/* Print Styles */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    .id-card-wrapper,
+    .id-card-wrapper * {
+        visibility: visible;
+    }
+
+    .id-card-wrapper {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+    }
+
+    .id-card {
+        box-shadow: none;
+        border: 2px solid black;
+    }
+}
+
+/* Photo Capture Styles */
+.camera-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+}
+
+.camera-section h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #475569;
+}
+
+.camera-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.camera-container video {
+    width: 100%;
+    border-radius: 8px;
+    background: #000;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+}
+
+.camera-placeholder {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: #e2e8f0;
+    border: 2px dashed #94a3b8;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.camera-placeholder:hover {
+    background: #cbd5e1;
+}
+
+.camera-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.capture-btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+}
+
+.capture-btn:hover {
+    background: #dc2626;
+}
+
+.photo-preview-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.photo-preview {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    aspect-ratio: 4/3;
+    object-fit: cover;
+}
+
+.retake-btn {
+    background: transparent;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.retake-btn:hover {
+    background: #f1f5f9;
+}
+
+.photo-box.captured {
+    border: 2px solid #16a34a;
+    padding: 2px;
+    background: white;
+}

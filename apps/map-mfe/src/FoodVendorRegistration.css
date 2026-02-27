@@ -1,0 +1,741 @@
+.food-vendor-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    font-family: inherit;
+    color: #334155;
+}
+
+.food-vendor-container button {
+    cursor: pointer;
+    font-family: inherit;
+}
+
+/* Header & Roles */
+.vendor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0f172a;
+    color: white;
+    padding: 20px 30px;
+    border-radius: 12px 12px 0 0;
+    margin-bottom: 20px;
+}
+
+.vendor-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.role-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 15px;
+    border-radius: 8px;
+}
+
+.role-select {
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #cbd5e1;
+    font-weight: bold;
+    color: #1e293b;
+    background-color: #ffffff;
+    cursor: pointer;
+    outline: none;
+}
+
+/* Status Messages */
+.status-message {
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.status-message.success {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.status-message.error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.status-message.info {
+    background: #e0f2fe;
+    color: #075985;
+    border: 1px solid #bae6fd;
+}
+
+/* Tabs */
+.tab-navigation {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    border: none;
+    background: #f1f5f9;
+    border-radius: 6px;
+    font-weight: bold;
+    color: #475569;
+    transition: all 0.2s;
+}
+
+.tab-btn:hover {
+    background: #e2e8f0;
+}
+
+.tab-btn.active {
+    background: #e65100;
+    color: white;
+    box-shadow: 0 4px 6px rgba(230, 81, 0, 0.2);
+}
+
+/* Form Styles */
+.form-panel {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.form-panel h3 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: #0f172a;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 10px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group.half {
+    flex: 1;
+}
+
+.form-group.full-width {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.vendor-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.9rem;
+}
+
+.vendor-form input,
+.vendor-form select,
+.vendor-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: #f8fafc;
+    color: #0f172a;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.vendor-form input:focus,
+.vendor-form select:focus,
+.vendor-form textarea:focus {
+    outline: none;
+    border-color: #e65100;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(230, 81, 0, 0.1);
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    justify-content: flex-end;
+}
+
+.btn-primary {
+    background: #e65100;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background: #c24100;
+}
+
+.btn-secondary {
+    background: #0f172a;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+    background: #334155;
+}
+
+.btn-outline {
+    background: transparent;
+    color: #475569;
+    padding: 12px 24px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.btn-outline:hover {
+    background: #f1f5f9;
+}
+
+
+/* List/Registry Panel */
+.list-panel {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.list-panel h3 {
+    margin-top: 0;
+    color: #0f172a;
+    margin-bottom: 20px;
+}
+
+.registry-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.registry-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+}
+
+.registry-card.approved {
+    border-left: 4px solid #10b981;
+}
+
+.registry-card.pending {
+    border-left: 4px solid #f59e0b;
+}
+
+.registry-card.revision-requested {
+    border-left: 4px solid #3b82f6;
+}
+
+.registry-card.rejected,
+.registry-card.blacklisted {
+    border-left: 4px solid #ef4444;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 10px;
+}
+
+.reg-id {
+    font-weight: bold;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.approved {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-badge.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge.revision-requested {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-badge.rejected,
+.status-badge.blacklisted {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.card-body {
+    flex-grow: 1;
+}
+
+.card-body h4 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+    color: #0f172a;
+}
+
+.card-body p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #475569;
+}
+
+.submission-date {
+    margin-top: 15px !important;
+    font-size: 0.8rem !important;
+    color: #94a3b8 !important;
+}
+
+.card-actions {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px dashed #e2e8f0;
+}
+
+.card-actions button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+.card-actions .btn-primary {
+    margin-bottom: 5px;
+    background: #e65100;
+    color: white;
+}
+
+.card-actions .btn-secondary {
+    background: #3b82f6;
+    color: white;
+}
+
+.officer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.officer-actions button {
+    flex: 1;
+    min-width: 100px;
+    padding: 8px;
+    font-size: 0.8rem;
+}
+
+.btn-approve {
+    background: #10b981;
+    color: white;
+}
+
+.btn-approve:hover {
+    background: #059669;
+}
+
+.btn-revise {
+    background: #3b82f6;
+    color: white;
+}
+
+.btn-revise:hover {
+    background: #2563eb;
+}
+
+.btn-reject {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-reject:hover {
+    background: #dc2626;
+}
+
+.btn-blacklist {
+    background: #111827;
+    color: white;
+    width: 100% !important;
+}
+
+.btn-blacklist:hover {
+    background: #000;
+}
+
+
+/* Vendor Pass preview */
+.pass-panel {
+    margin-top: 30px;
+    border-top: 3px solid #e2e8f0;
+    padding-top: 30px;
+}
+
+.pass-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.pass-actions h3 {
+    margin: 0;
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+}
+
+.vendor-pass-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background: #f1f5f9;
+    border-radius: 12px;
+}
+
+.vendor-pass {
+    width: 350px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 2px solid #e2e8f0;
+    overflow: hidden;
+}
+
+.pass-header {
+    background: #e65100;
+    color: white;
+    text-align: center;
+    padding: 15px 10px;
+}
+
+.pass-header h3 {
+    margin: 5px 0 0 0;
+    font-size: 1.1rem;
+    line-height: 1.2;
+}
+
+.pass-header h3 span {
+    font-size: 0.8rem;
+    font-weight: normal;
+    opacity: 0.9;
+}
+
+.pass-title {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.pass-body {
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.qr-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.qr-section img {
+    border: 4px solid #f1f5f9;
+    border-radius: 8px;
+}
+
+.vendor-id-badge {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    color: #475569;
+    font-size: 0.9rem;
+}
+
+.vendor-details-section {
+    width: 100%;
+    text-align: center;
+}
+
+.org-name {
+    margin: 0 0 5px 0;
+    color: #0f172a;
+    font-size: 1.3rem;
+}
+
+.owner-name {
+    margin: 0 0 15px 0;
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.pass-details-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    text-align: left;
+}
+
+.pass-details-table td {
+    padding: 6px 4px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+}
+
+.pass-details-table td:first-child {
+    color: #64748b;
+    width: 40%;
+}
+
+.highlight-zone {
+    font-weight: bold;
+    color: #e65100 !important;
+}
+
+.pass-footer {
+    padding: 15px;
+    background: #f8fafc;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 0.75rem;
+    color: #64748b;
+    border-top: 1px dashed #cbd5e1;
+}
+
+.validity p {
+    margin: 2px 0;
+}
+
+.signature {
+    text-align: center;
+}
+
+.sig-line {
+    width: 80px;
+    height: 1px;
+    background: #94a3b8;
+    margin-bottom: 5px;
+}
+
+.signature p {
+    margin: 0;
+    font-weight: bold;
+}
+
+.pass-warning {
+    background: #ef4444;
+    color: white;
+    font-size: 0.65rem;
+    text-align: center;
+    padding: 8px;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    .vendor-pass-wrapper,
+    .vendor-pass-wrapper * {
+        visibility: visible;
+    }
+
+    .vendor-pass-wrapper {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        background: transparent;
+    }
+
+    .vendor-pass {
+        box-shadow: none;
+        border: 1px solid black;
+    }
+}
+
+/* Photo Section on Pass */
+.owner-photo-pass {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 10px auto;
+    border-radius: 50%;
+    border: 3px solid #e65100;
+    overflow: hidden;
+    background: #f1f5f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.owner-photo-pass img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.photo-placeholder {
+    font-size: 2.5rem;
+    color: #94a3b8;
+}
+
+/* Camera Capture UI */
+.camera-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+}
+
+.camera-section h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #475569;
+}
+
+.camera-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.camera-container video {
+    width: 100%;
+    border-radius: 8px;
+    background: #000;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+}
+
+.camera-placeholder {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: #e2e8f0;
+    border: 2px dashed #94a3b8;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.camera-placeholder:hover {
+    background: #cbd5e1;
+}
+
+.camera-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.capture-btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+}
+
+.capture-btn:hover {
+    background: #dc2626;
+}
+
+.photo-preview-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.photo-preview {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    aspect-ratio: 4/3;
+    object-fit: cover;
+}
+
+.retake-btn {
+    background: transparent;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.retake-btn:hover {
+    background: #f1f5f9;
+}

@@ -6,6 +6,11 @@ const FederatedMap = React.lazy(() => import('map_mfe/FederatedMap'));
 const ParkingArea = React.lazy(() => import('map_mfe/ParkingArea'));
 const LaserShow = React.lazy(() => import('map_mfe/LaserShow'));
 const AkharaRegistration = React.lazy(() => import('map_mfe/AkharaRegistration'));
+const LostAndFound = React.lazy(() => import('map_mfe/LostAndFound'));
+const WorkerRegistration = React.lazy(() => import('map_mfe/WorkerRegistration'));
+const FacilitiesLayout = React.lazy(() => import('map_mfe/FacilitiesLayout'));
+const FoodVendorRegistration = React.lazy(() => import('map_mfe/FoodVendorRegistration'));
+const MedicalAssistance = React.lazy(() => import('map_mfe/MedicalAssistance'));
 
 function App() {
   const [places, setPlaces] = useState([]);
@@ -26,7 +31,7 @@ function App() {
         <p>Immersive AI Interactive Guide</p>
       </header>
 
-      <div className="tabs-nav" style={{ display: 'flex', gap: '10px', padding: '10px 20px', background: '#fff', borderBottom: '1px solid #eee' }}>
+      <div className="tabs-nav" style={{ display: 'flex', gap: '10px', padding: '10px 20px', background: '#fff', borderBottom: '1px solid #eee', overflowX: 'auto', whiteSpace: 'nowrap' }}>
         <button
           className={`tab-btn ${activeTab === 'map' ? 'active' : ''}`}
           onClick={() => setActiveTab('map')}
@@ -54,6 +59,41 @@ function App() {
           style={{ padding: '10px 20px', cursor: 'pointer', background: activeTab === 'tent' ? '#e65100' : '#f0f0f0', color: activeTab === 'tent' ? 'white' : 'black', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}
         >
           Akhara Tents
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 'lostfound' ? 'active' : ''}`}
+          onClick={() => setActiveTab('lostfound')}
+          style={{ padding: '10px 20px', cursor: 'pointer', background: activeTab === 'lostfound' ? '#ef4444' : '#f0f0f0', color: activeTab === 'lostfound' ? 'white' : 'black', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}
+        >
+          Lost & Found
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 'workers' ? 'active' : ''}`}
+          onClick={() => setActiveTab('workers')}
+          style={{ padding: '10px 20px', cursor: 'pointer', background: activeTab === 'workers' ? '#16a34a' : '#f0f0f0', color: activeTab === 'workers' ? 'white' : 'black', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}
+        >
+          Worker Passes
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 'facilities' ? 'active' : ''}`}
+          onClick={() => setActiveTab('facilities')}
+          style={{ padding: '10px 20px', cursor: 'pointer', background: activeTab === 'facilities' ? '#0ea5e9' : '#f0f0f0', color: activeTab === 'facilities' ? 'white' : 'black', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}
+        >
+          Facilities Layout
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 'foodvendors' ? 'active' : ''}`}
+          onClick={() => setActiveTab('foodvendors')}
+          style={{ padding: '10px 20px', cursor: 'pointer', background: activeTab === 'foodvendors' ? '#d97706' : '#f0f0f0', color: activeTab === 'foodvendors' ? 'white' : 'black', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}
+        >
+          Food Vendors
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 'medical' ? 'active' : ''}`}
+          onClick={() => setActiveTab('medical')}
+          style={{ padding: '10px 20px', cursor: 'pointer', background: activeTab === 'medical' ? '#dc2626' : '#f0f0f0', color: activeTab === 'medical' ? 'white' : 'black', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}
+        >
+          Medical Help
         </button>
       </div>
 
@@ -109,6 +149,46 @@ function App() {
           <section className="tent-view" style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
             <Suspense fallback={<div className="loading-tent">Loading Tent Registration...</div>}>
               <AkharaRegistration />
+            </Suspense>
+          </section>
+        )}
+
+        {activeTab === 'lostfound' && (
+          <section className="lostfound-view" style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
+            <Suspense fallback={<div className="loading-lostfound">Loading Lost & Found...</div>}>
+              <LostAndFound />
+            </Suspense>
+          </section>
+        )}
+
+        {activeTab === 'workers' && (
+          <section className="workers-view" style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
+            <Suspense fallback={<div className="loading-workers">Loading Worker Portal...</div>}>
+              <WorkerRegistration />
+            </Suspense>
+          </section>
+        )}
+
+        {activeTab === 'facilities' && (
+          <section className="facilities-view" style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
+            <Suspense fallback={<div className="loading-facilities">Loading Facilities Map...</div>}>
+              <FacilitiesLayout />
+            </Suspense>
+          </section>
+        )}
+
+        {activeTab === 'foodvendors' && (
+          <section className="food-vendor-view" style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
+            <Suspense fallback={<div className="loading-vendors">Loading Vendor Dashboard...</div>}>
+              <FoodVendorRegistration />
+            </Suspense>
+          </section>
+        )}
+
+        {activeTab === 'medical' && (
+          <section className="medical-view" style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
+            <Suspense fallback={<div className="loading-medical">Loading Medical Assistance Interface...</div>}>
+              <MedicalAssistance />
             </Suspense>
           </section>
         )}
