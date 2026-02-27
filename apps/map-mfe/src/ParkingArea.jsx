@@ -49,7 +49,8 @@ export default function ParkingArea() {
         for (let s = 1; s <= TOTAL_SECTORS; s++) {
             const sectorKey = `S${s}`;
             for (const bay of ['A1', 'A2']) {
-                if (parkingData[sectorKey][bay].includes(reg)) {
+                const parkedCar = parkingData[sectorKey][bay].find(slot => slot && slot.reg === reg);
+                if (parkedCar) {
                     setMessage(`Car ${reg} is already parked in ${sectorKey}-${bay}`);
                     return;
                 }
@@ -66,12 +67,14 @@ export default function ParkingArea() {
         const newData = { ...parkingData };
         // Deep copy the bay array
         newData[availableSlot.sector][availableSlot.bay] = [...newData[availableSlot.sector][availableSlot.bay]];
-        newData[availableSlot.sector][availableSlot.bay][availableSlot.index] = reg;
+
+        const entryTime = new Date().toLocaleString();
+        newData[availableSlot.sector][availableSlot.bay][availableSlot.index] = { reg, time: entryTime };
 
         const slotId = `${availableSlot.sector}-${availableSlot.bay}-${String(availableSlot.index + 1).padStart(3, '0')}`;
 
         setParkingData(newData);
-        setMovementLog([{ id: Date.now(), time: new Date().toLocaleTimeString(), type: 'IN', reg, slot: slotId }, ...movementLog]);
+        setMovementLog([{ id: Date.now(), time: entryTime, type: 'IN', reg, slot: slotId }, ...movementLog]);
         setCarRegInput('');
         setMessage(`Allocated slot for ${reg} at ${slotId}`);
         setActiveSector(availableSlot.sector);
@@ -92,7 +95,7 @@ export default function ParkingArea() {
         for (let s = 1; s <= TOTAL_SECTORS; s++) {
             const sectorKey = `S${s}`;
             for (const bay of ['A1', 'A2']) {
-                const slotIndex = newData[sectorKey][bay].findIndex(slot => slot === reg);
+                const slotIndex = newData[sectorKey][bay].findIndex(slot => slot && slot.reg === reg);
                 if (slotIndex !== -1) {
                     // Car found, empty slot
                     newData[sectorKey][bay] = [...newData[sectorKey][bay]];
@@ -127,7 +130,11 @@ export default function ParkingArea() {
                 parkingData[sectorKey][bay].forEach((slot, index) => {
                     if (slot !== null) {
                         occupied++;
-                        parkedList.push({ reg: slot, slot: `${sectorKey}-${bay}-${String(index + 1).padStart(3, '0')}` });
+                        parkedList.push({
+                            reg: slot.reg,
+                            time: slot.time,
+                            slot: `${sectorKey}-${bay}-${String(index + 1).padStart(3, '0')}`
+                        });
                     }
                 });
             }
@@ -198,10 +205,10 @@ export default function ParkingArea() {
                                 <div
                                     key={slotId}
                                     className={`parking-slot ${slot ? 'occupied' : 'empty'}`}
-                                    title={slot ? `Occupied by ${slot}` : 'Empty'}
+                                    title={slot ? `Occupied by ${slot.reg} since ${slot.time}` : 'Empty'}
                                 >
                                     <span className="slot-number">{String(index + 1).padStart(3, '0')}</span>
-                                    {slot && <span className="car-reg">{slot}</span>}
+                                    {slot && <span className="car-reg">{slot.reg}</span>}
                                 </div>
                             );
                         })}
@@ -235,7 +242,10 @@ export default function ParkingArea() {
                             <ul>
                                 {stats.parkedList.map((car, i) => (
                                     <li key={i} className="parked-item">
-                                        <span className="reg-badge">{car.reg}</span> - <span>{car.slot}</span>
+                                        <div>
+                                            <span className="reg-badge">{car.reg}</span> - <span>{car.slot}</span>
+                                        </div>
+                                        <div style={{ fontSize: '0.8em', color: '#666' }}>Since: {car.time}</div>
                                     </li>
                                 ))}
                             </ul>

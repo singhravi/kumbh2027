@@ -39,11 +39,20 @@
 .entry-form input,
 .exit-form input {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    background-color: #ffffff;
+    color: #1e293b;
+    font-size: 1rem;
+}
+
+.entry-form input::placeholder,
+.exit-form input::placeholder {
+    color: #94a3b8;
+    opacity: 1;
 }
 
 .btn-entry {
