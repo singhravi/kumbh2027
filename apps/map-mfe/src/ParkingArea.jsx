@@ -23,6 +23,12 @@ export default function ParkingArea() {
     const [activeBay, setActiveBay] = useState('A1');
     const [movementLog, setMovementLog] = useState([]);
 
+    // Payment State
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [paymentStatus, setPaymentStatus] = useState('pending'); // pending, processing, success
+    const [exitDetails, setExitDetails] = useState(null);
+    const [paymentMethod, setPaymentMethod] = useState('upi');
+
     // Log & Search State
     const [activeLogTab, setActiveLogTab] = useState('movement'); // 'movement' or 'parked'
     const [movementSearch, setMovementSearch] = useState('');
@@ -94,35 +100,73 @@ export default function ParkingArea() {
             return;
         }
 
-        let found = false;
-        const newData = { ...parkingData };
+        let foundCar = null;
+        let foundKeys = null;
 
         for (let s = 1; s <= TOTAL_SECTORS; s++) {
             const sectorKey = `S${s}`;
             for (const bay of ['A1', 'A2']) {
-                const slotIndex = newData[sectorKey][bay].findIndex(slot => slot && slot.reg === reg);
+                const slotIndex = parkingData[sectorKey][bay].findIndex(slot => slot && slot.reg === reg);
                 if (slotIndex !== -1) {
-                    // Car found, empty slot
-                    newData[sectorKey][bay] = [...newData[sectorKey][bay]];
-                    newData[sectorKey][bay][slotIndex] = null;
-                    found = true;
-
+                    foundCar = parkingData[sectorKey][bay][slotIndex];
                     const slotId = `${sectorKey}-${bay}-${String(slotIndex + 1).padStart(3, '0')}`;
-
-                    setParkingData(newData);
-                    setMovementLog([{ id: Date.now(), time: new Date().toLocaleTimeString(), type: 'OUT', reg, slot: slotId }, ...movementLog]);
-                    setExitRegInput('');
-                    setMessage(`Car ${reg} exited from ${slotId}`);
-                    setActiveSector(sectorKey);
-                    setActiveBay(bay);
-                    return;
+                    foundKeys = { sectorKey, bay, slotIndex, slotId };
+                    break;
                 }
             }
+            if (foundCar) break;
         }
 
-        if (!found) {
+        if (!foundCar) {
             setMessage(`Car ${reg} not found in parking.`);
+            return;
         }
+
+        // Calculate a dummy duration and fee
+        const entryTime = new Date(foundCar.time);
+        // Fallback to random fee if time parsing fails
+        const durationHours = Math.max(1, Math.ceil((new Date() - entryTime) / (1000 * 60 * 60)) || Math.floor(Math.random() * 5) + 1);
+        const fee = durationHours * 50; // ₹50 per hour
+
+        // Trigger payment flow
+        setExitDetails({ reg, ...foundKeys, fee, durationHours, time: new Date() });
+        setPaymentMethod('upi'); // default
+        setPaymentStatus('pending');
+        setIsPaymentModalOpen(true);
+    };
+
+    const processFinalExit = () => {
+        if (!exitDetails) return;
+        const { reg, sectorKey, bay, slotIndex, slotId } = exitDetails;
+
+        const newData = { ...parkingData };
+        newData[sectorKey][bay] = [...newData[sectorKey][bay]];
+        newData[sectorKey][bay][slotIndex] = null;
+
+        setParkingData(newData);
+        setMovementLog([{ id: Date.now(), time: new Date().toLocaleTimeString(), type: 'OUT', reg, slot: slotId, payment: paymentMethod }, ...movementLog]);
+
+        setIsPaymentModalOpen(false);
+        setExitRegInput('');
+        setExitDetails(null);
+        setMessage(`Car ${reg} exited from ${slotId}. Paid via ${paymentMethod.toUpperCase()}`);
+        setActiveSector(sectorKey);
+        setActiveBay(bay);
+    };
+
+    const handleSimulatePayment = () => {
+        if (paymentMethod === 'cash') {
+            processFinalExit();
+            return;
+        }
+
+        setPaymentStatus('processing');
+        setTimeout(() => {
+            setPaymentStatus('success');
+            setTimeout(() => {
+                processFinalExit();
+            }, 1000);
+        }, 2000);
     };
 
     const calculateOccupancy = () => {
@@ -310,6 +354,60 @@ export default function ParkingArea() {
                     )}
                 </div>
             </div>
+
+            {/* Payment Modal */}
+            {isPaymentModalOpen && exitDetails && (
+                <div className="payment-modal-overlay">
+                    <div className="payment-modal">
+                        <div className="payment-modal-header">
+                            <h3>Parking Exit Payment</h3>
+                            <button className="close-btn" onClick={() => setIsPaymentModalOpen(false)} disabled={paymentStatus === 'processing'}>✕</button>
+                        </div>
+                        <div className="payment-modal-body">
+                            <div className="payment-summary">
+                                <p>Vehicle Registration: <strong>{exitDetails.reg}</strong></p>
+                                <p>Duration: {exitDetails.durationHours} Hours</p>
+                                <h2>₹{exitDetails.fee}</h2>
+                            </div>
+
+                            {paymentStatus === 'pending' && (
+                                <>
+                                    <div className="payment-method-select">
+                                        <label>Select Payment Method:</label>
+                                        <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)} style={{ width: '100%', padding: '10px', marginTop: '10px', borderRadius: '4px', border: '1px solid #ccc' }}>
+                                            <option value="upi">UPI / Scanner</option>
+                                            <option value="netbanking">Net Banking</option>
+                                            <option value="credit_card">Credit Card</option>
+                                            <option value="debit_card">Debit Card</option>
+                                            <option value="cash">Cash</option>
+                                        </select>
+                                    </div>
+                                    <div className="payment-actions" style={{ marginTop: '20px' }}>
+                                        <button className="btn-exit" onClick={handleSimulatePayment} style={{ width: '100%', padding: '12px', fontSize: '1rem', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+                                            {paymentMethod === 'cash' ? 'Collect Cash & Open Gate' : 'Simulate Payment Processing'}
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+
+                            {paymentStatus === 'processing' && (
+                                <div className="payment-processing" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px' }}>
+                                    <div className="spinner" style={{ width: '40px', height: '40px', border: '4px solid #f3f3f3', borderTop: '4px solid #3b82f6', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+                                    <p style={{ marginTop: '15px', fontWeight: 'bold' }}>Processing transaction...</p>
+                                </div>
+                            )}
+
+                            {paymentStatus === 'success' && (
+                                <div className="payment-success" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px', color: '#10b981' }}>
+                                    <div className="success-icon" style={{ fontSize: '3rem' }}>✓</div>
+                                    <p style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>Payment Successful!</p>
+                                    <p style={{ color: '#6b7280' }}>Opening Boom Barrier Gate...</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
