@@ -17,6 +17,8 @@ The frontend (`host-app` and `map-mfe`) can be hosted on Content Delivery Networ
    - Set the Output Directory to `apps/map-mfe/dist`.
    - After deploying, you will receive a public URL (e.g., `https://map-mfe-kumbh.vercel.app`).
    
+   *(Note: The map-mfe bundle now includes several robust sub-modules exposing critical Kumbh functions: Parking Area, Laser Show, Akhara Registration, Facilities Layout, Food Vendor Registration, Sanitary Worker Registration, Medical Assistance, Lost & Found, Ration Management, and Donation Management. Building this app will compile all of these components into the federated `remoteEntry.js` file).*
+   
 2. **Update the `host-app` Config:**
    - Open `apps/host-app/vite.config.js`.
    - Update the `remotes` section to point to the new public URL:
