@@ -23,6 +23,11 @@ export default function ParkingArea() {
     const [activeBay, setActiveBay] = useState('A1');
     const [movementLog, setMovementLog] = useState([]);
 
+    // Log & Search State
+    const [activeLogTab, setActiveLogTab] = useState('movement'); // 'movement' or 'parked'
+    const [movementSearch, setMovementSearch] = useState('');
+    const [parkedSearch, setParkedSearch] = useState('');
+
     // Find the first available slot in the entire parking lot
     const findAvailableSlot = () => {
         for (let s = 1; s <= TOTAL_SECTORS; s++) {
@@ -144,6 +149,14 @@ export default function ParkingArea() {
 
     const stats = calculateOccupancy();
 
+    const filteredMovementLog = movementLog.filter(log =>
+        log.reg.includes(movementSearch.trim().toUpperCase())
+    );
+
+    const filteredParkedList = stats.parkedList.filter(car =>
+        car.reg.includes(parkedSearch.trim().toUpperCase())
+    );
+
     return (
         <div className="parking-area-container">
             <div className="parking-controls">
@@ -208,7 +221,12 @@ export default function ParkingArea() {
                                     title={slot ? `Occupied by ${slot.reg} since ${slot.time}` : 'Empty'}
                                 >
                                     <span className="slot-number">{String(index + 1).padStart(3, '0')}</span>
-                                    {slot && <span className="car-reg">{slot.reg}</span>}
+                                    {slot && (
+                                        <>
+                                            <span className="car-reg">{slot.reg}</span>
+                                            <span className="car-time">{slot.time}</span>
+                                        </>
+                                    )}
                                 </div>
                             );
                         })}
@@ -217,40 +235,79 @@ export default function ParkingArea() {
             </div>
 
             <div className="movement-details">
-                <div className="movement-log">
-                    <h4>Movement Activity Log</h4>
-                    <div className="log-list">
-                        {movementLog.length === 0 ? <p className="text-muted">No movements yet.</p> : (
-                            <ul>
-                                {movementLog.map(log => (
-                                    <li key={log.id} className={`log-item ${log.type.toLowerCase()}`}>
-                                        <span className="log-time">[{log.time}]</span>
-                                        <span className={`log-type ${log.type === 'IN' ? 'text-success' : 'text-danger'}`}><strong>{log.type}</strong></span>
-                                        <span className="log-reg">{log.reg}</span>
-                                        <span className="log-slot">Slot: {log.slot}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                    </div>
+                <div className="log-tabs-nav">
+                    <button
+                        className={`log-tab-btn ${activeLogTab === 'movement' ? 'active' : ''}`}
+                        onClick={() => setActiveLogTab('movement')}
+                    >
+                        Movement Activity Log
+                    </button>
+                    <button
+                        className={`log-tab-btn ${activeLogTab === 'parked' ? 'active' : ''}`}
+                        onClick={() => setActiveLogTab('parked')}
+                    >
+                        Currently Parked ({stats.occupied})
+                    </button>
                 </div>
 
-                <div className="parked-cars">
-                    <h4>Currently Parked Vehicles ({stats.occupied})</h4>
-                    <div className="parked-list">
-                        {stats.parkedList.length === 0 ? <p className="text-muted">Parking lot is empty.</p> : (
-                            <ul>
-                                {stats.parkedList.map((car, i) => (
-                                    <li key={i} className="parked-item">
-                                        <div>
-                                            <span className="reg-badge">{car.reg}</span> - <span>{car.slot}</span>
-                                        </div>
-                                        <div style={{ fontSize: '0.8em', color: '#666' }}>Since: {car.time}</div>
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                    </div>
+                <div className="log-tab-content">
+                    {activeLogTab === 'movement' && (
+                        <div className="movement-log">
+                            <div className="log-header">
+                                <h4>Recent Movements</h4>
+                                <input
+                                    type="text"
+                                    className="search-input"
+                                    placeholder="Search Vehicle Reg..."
+                                    value={movementSearch}
+                                    onChange={(e) => setMovementSearch(e.target.value)}
+                                />
+                            </div>
+                            <div className="log-list">
+                                {filteredMovementLog.length === 0 ? <p className="text-muted">No matching movements.</p> : (
+                                    <ul>
+                                        {filteredMovementLog.map(log => (
+                                            <li key={log.id} className={`log-item ${log.type.toLowerCase()}`}>
+                                                <span className="log-time">[{log.time}]</span>
+                                                <span className={`log-type ${log.type === 'IN' ? 'text-success' : 'text-danger'}`}><strong>{log.type}</strong></span>
+                                                <span className="log-reg">{log.reg}</span>
+                                                <span className="log-slot">Slot: {log.slot}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {activeLogTab === 'parked' && (
+                        <div className="parked-cars">
+                            <div className="log-header">
+                                <h4>Vehicles in Lot</h4>
+                                <input
+                                    type="text"
+                                    className="search-input"
+                                    placeholder="Search Vehicle Reg..."
+                                    value={parkedSearch}
+                                    onChange={(e) => setParkedSearch(e.target.value)}
+                                />
+                            </div>
+                            <div className="parked-list">
+                                {filteredParkedList.length === 0 ? <p className="text-muted">No matching vehicles parked.</p> : (
+                                    <ul>
+                                        {filteredParkedList.map((car, i) => (
+                                            <li key={i} className="parked-item">
+                                                <div>
+                                                    <span className="reg-badge">{car.reg}</span> - <span>{car.slot}</span>
+                                                </div>
+                                                <div style={{ fontSize: '0.8em', color: '#666' }}>Since: {car.time}</div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

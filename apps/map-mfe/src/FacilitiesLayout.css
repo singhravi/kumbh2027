@@ -108,11 +108,18 @@
     width: 300px;
     font-size: 1rem;
     outline: none;
-    transition: border-color 0.2s;
+    transition: box-shadow 0.2s, border-color 0.2s;
+    background-color: #ffffff;
+    color: #1e293b;
+}
+
+.zone-search::placeholder {
+    color: #94a3b8;
 }
 
 .zone-search:focus {
-    border-color: #94a3b8;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .view-toggles {

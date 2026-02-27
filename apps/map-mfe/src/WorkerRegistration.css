@@ -71,6 +71,12 @@
     background: #f8fafc;
     color: #0f172a;
     /* Explicit color for text visibility */
+    color-scheme: light;
+}
+
+.worker-form input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.4) sepia(1) hue-rotate(180deg) saturate(2);
+    cursor: pointer;
 }
 
 .worker-form input:focus,

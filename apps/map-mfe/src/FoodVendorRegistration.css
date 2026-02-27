@@ -153,6 +153,12 @@
     color: #0f172a;
     font-size: 0.95rem;
     box-sizing: border-box;
+    color-scheme: light;
+}
+
+.vendor-form input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.4) sepia(1) hue-rotate(180deg) saturate(2);
+    cursor: pointer;
 }
 
 .vendor-form input:focus,

@@ -17,7 +17,9 @@ export default defineConfig({
         './WorkerRegistration': './src/WorkerRegistration.jsx',
         './FacilitiesLayout': './src/FacilitiesLayout.jsx',
         './FoodVendorRegistration': './src/FoodVendorRegistration.jsx',
-        './MedicalAssistance': './src/MedicalAssistance.jsx'
+        './MedicalAssistance': './src/MedicalAssistance.jsx',
+        './RationManagement': './src/RationManagement.jsx',
+        './DonationManagement': './src/DonationManagement.jsx'
       },
       shared: ['react', 'react-dom']
     })

@@ -11,6 +11,8 @@ const WorkerRegistration = React.lazy(() => import('map_mfe/WorkerRegistration')
 const FacilitiesLayout = React.lazy(() => import('map_mfe/FacilitiesLayout'));
 const FoodVendorRegistration = React.lazy(() => import('map_mfe/FoodVendorRegistration'));
 const MedicalAssistance = React.lazy(() => import('map_mfe/MedicalAssistance'));
+const RationManagement = React.lazy(() => import('map_mfe/RationManagement'));
+const DonationManagement = React.lazy(() => import('map_mfe/DonationManagement'));
 
 function App() {
   const [places, setPlaces] = useState([]);
@@ -94,6 +96,20 @@ function App() {
           style={{ padding: '10px 20px', cursor: 'pointer', background: activeTab === 'medical' ? '#dc2626' : '#f0f0f0', color: activeTab === 'medical' ? 'white' : 'black', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}
         >
           Medical Help
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 'ration' ? 'active' : ''}`}
+          onClick={() => setActiveTab('ration')}
+          style={{ padding: '10px 20px', cursor: 'pointer', background: activeTab === 'ration' ? '#047857' : '#f0f0f0', color: activeTab === 'ration' ? 'white' : 'black', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}
+        >
+          Ration Mgmt
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 'donation' ? 'active' : ''}`}
+          onClick={() => setActiveTab('donation')}
+          style={{ padding: '10px 20px', cursor: 'pointer', background: activeTab === 'donation' ? '#6d28d9' : '#f0f0f0', color: activeTab === 'donation' ? 'white' : 'black', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}
+        >
+          Donations
         </button>
       </div>
 
@@ -189,6 +205,22 @@ function App() {
           <section className="medical-view" style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
             <Suspense fallback={<div className="loading-medical">Loading Medical Assistance Interface...</div>}>
               <MedicalAssistance />
+            </Suspense>
+          </section>
+        )}
+
+        {activeTab === 'ration' && (
+          <section className="ration-view" style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
+            <Suspense fallback={<div className="loading-ration">Loading Ration Management...</div>}>
+              <RationManagement />
+            </Suspense>
+          </section>
+        )}
+
+        {activeTab === 'donation' && (
+          <section className="donation-view" style={{ flex: 1, padding: '20px', overflowY: 'auto', backgroundColor: '#f8fafc' }}>
+            <Suspense fallback={<div className="loading-donation">Loading Donation Portal...</div>}>
+              <DonationManagement />
             </Suspense>
           </section>
         )}
