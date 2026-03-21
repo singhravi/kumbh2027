@@ -1,0 +1,76 @@
+services:
+  # Microservices
+  - type: web
+    name: places-service
+    env: node
+    rootDir: services/places-service
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 4001
+
+  - type: web
+    name: ai-media-service
+    env: node
+    rootDir: services/ai-media-service
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 4002
+
+  - type: web
+    name: api-gateway
+    env: node
+    rootDir: services/api-gateway
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PLACES_SERVICE_URL
+        fromService:
+          type: web
+          name: places-service
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: AI_MEDIA_SERVICE_URL
+        fromService:
+          type: web
+          name: ai-media-service
+          envVarKey: RENDER_EXTERNAL_URL
+
+  # Frontend Micro-Frontends
+  - type: web
+    name: map-mfe
+    env: static
+    rootDir: apps/map-mfe
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: api-gateway
+          envVarKey: RENDER_EXTERNAL_URL
+
+  - type: web
+    name: host-app
+    env: static
+    rootDir: apps/host-app
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: api-gateway
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: VITE_MAP_MFE_URL
+        fromService:
+          type: web
+          name: map-mfe
+          property: url     # Appends /assets/remoteEntry.js securely
+          # Wait, in render.yaml v1, we can't concatenate strings easily inside the yaml. 
+          # Let's set the base URL and let the user append the path, or set the VITE_MAP_MFE_URL fully.
+          # Actually, Render's static site URLs don't have a trailing slash, so we can't just inject the host.
+          # We can use `${map-mfe.url}/assets/remoteEntry.js`? Render yaml doesn't support interpolation like this yet.
+          # So we will just use the RENDER_EXTERNAL_URL of the host as a fallback in the code or just let them define it manually. Let's just pass the MAP MFE BASE URL.
