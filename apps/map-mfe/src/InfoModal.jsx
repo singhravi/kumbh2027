@@ -8,7 +8,8 @@ export default function InfoModal({ place, onClose }) {
 
     useEffect(() => {
         setLoading(true);
-        fetch(`http://localhost:4000/media/${place.id}`)
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+        fetch(`${API_BASE_URL}/media/${place.id}`)
             .then(res => res.json())
             .then(data => {
                 setMedia(data);

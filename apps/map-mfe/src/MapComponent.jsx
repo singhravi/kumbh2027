@@ -82,7 +82,8 @@ export default function MapComponent({ selectedPlaceId, onShowInfo }) {
     const [mapCenter, setMapCenter] = useState([29.9457, 78.1642]); // Haridwar center default
 
     useEffect(() => {
-        fetch(`http://localhost:4000/places?t=${new Date().getTime()}`, { cache: 'no-store' })
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+        fetch(`${API_BASE_URL}/places?t=${new Date().getTime()}`, { cache: 'no-store' })
             .then(res => res.json())
             .then(data => setPlaces(data))
             .catch(console.error);

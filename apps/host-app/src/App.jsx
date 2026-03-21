@@ -20,7 +20,8 @@ function App() {
   const [activeTab, setActiveTab] = useState('map'); // 'map', 'parking', 'laser', 'tent'
 
   useEffect(() => {
-    fetch(`http://localhost:4000/places?t=${new Date().getTime()}`, { cache: 'no-store' })
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+    fetch(`${API_BASE_URL}/places?t=${new Date().getTime()}`, { cache: 'no-store' })
       .then(res => res.json())
       .then(data => setPlaces(data))
       .catch(console.error);
