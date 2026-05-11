@@ -76,7 +76,25 @@ export default function WorkerRegistration() {
     };
 
     const handlePrint = () => {
-        window.print();
+        const element = printRef.current;
+        const opt = {
+            margin:       10,
+            filename:     'worker-pass.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        if (!window.html2pdf) {
+            const script = document.createElement('script');
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+            script.onload = () => {
+                window.html2pdf().set(opt).from(element).save();
+            };
+            document.body.appendChild(script);
+        } else {
+            window.html2pdf().set(opt).from(element).save();
+        }
     };
 
     useEffect(() => {

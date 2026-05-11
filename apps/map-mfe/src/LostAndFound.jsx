@@ -16,6 +16,7 @@ export default function LostAndFound() {
         contactName: '',
         contactPhone: '',
         itemImage: null,
+        itemVideo: null,
         relationship: ''
     });
 
@@ -27,11 +28,15 @@ export default function LostAndFound() {
         dateFound: '',
         depositedAt: '',
         itemImage: null,
+        itemVideo: null,
         relationship: ''
     });
 
     // Camera State
     const [isCameraActive, setIsCameraActive] = useState(false);
+    const [isRecording, setIsRecording] = useState(false);
+    const mediaRecorderRef = useRef(null);
+    const recordedChunksRef = useRef([]);
     const [activeCameraForm, setActiveCameraForm] = useState(null); // 'report' or 'log'
     const [facingMode, setFacingMode] = useState('environment'); // 'environment' (back) or 'user' (front)
     const videoRef = useRef(null);
@@ -136,12 +141,50 @@ export default function LostAndFound() {
             const dataUrl = canvasRef.current.toDataURL('image/png');
 
             if (activeCameraForm === 'report') {
-                setReportData(prev => ({ ...prev, itemImage: dataUrl }));
+                setReportData(prev => ({ ...prev, itemImage: dataUrl, itemVideo: null }));
             } else if (activeCameraForm === 'log') {
-                setLogData(prev => ({ ...prev, itemImage: dataUrl }));
+                setLogData(prev => ({ ...prev, itemImage: dataUrl, itemVideo: null }));
             }
 
             stopCamera();
+        }
+    };
+
+    const startRecording = () => {
+        setIsRecording(true);
+        recordedChunksRef.current = [];
+        const stream = streamRef.current;
+        if (!stream) return;
+        
+        try {
+            mediaRecorderRef.current = new MediaRecorder(stream, { mimeType: 'video/webm' });
+            mediaRecorderRef.current.addEventListener('dataavailable', ({ data }) => {
+                if (data.size > 0) {
+                    recordedChunksRef.current.push(data);
+                }
+            });
+            mediaRecorderRef.current.addEventListener('stop', () => {
+                const blob = new Blob(recordedChunksRef.current, { type: 'video/webm' });
+                const url = URL.createObjectURL(blob);
+                if (activeCameraForm === 'report') {
+                    setReportData(prev => ({ ...prev, itemVideo: url, itemImage: null }));
+                } else if (activeCameraForm === 'log') {
+                    setLogData(prev => ({ ...prev, itemVideo: url, itemImage: null }));
+                }
+                setIsRecording(false);
+                stopCamera();
+            });
+            mediaRecorderRef.current.start();
+            
+            setTimeout(() => {
+                if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
+                    mediaRecorderRef.current.stop();
+                }
+            }, 5000);
+        } catch (e) {
+            console.error("MediaRecorder error", e);
+            setMessage("Video recording not supported in this browser.");
+            setIsRecording(false);
         }
     };
 
@@ -209,13 +252,61 @@ export default function LostAndFound() {
             </div>
 
             <div className="lnf-navbar">
-                <button className={`lnf-tab ${activeTab === 'report' ? 'active' : ''}`} onClick={() => { setActiveTab('report'); setMessage(''); }}>Report Lost Item</button>
-                <button className={`lnf-tab ${activeTab === 'log' ? 'active' : ''}`} onClick={() => { setActiveTab('log'); setMessage(''); }}>Log Found Item</button>
-                <button className={`lnf-tab ${activeTab === 'search' ? 'active' : ''}`} onClick={() => { setActiveTab('search'); setMessage(''); }}>Search Registry</button>
+                <button className={`lnf-tab ${activeTab === 'notice' ? 'active' : ''}`} onClick={() => { setActiveTab('notice'); setMessage(''); }} style={{ background: activeTab === 'notice' ? '#dc2626' : '', color: activeTab === 'notice' ? 'white' : ''}}>🚨 Digital Notice Board</button>
+                <button className={`lnf-tab ${activeTab === 'report' ? 'active' : ''}`} onClick={() => { setActiveTab('report'); setMessage(''); }}>Report Lost</button>
+                <button className={`lnf-tab ${activeTab === 'log' ? 'active' : ''}`} onClick={() => { setActiveTab('log'); setMessage(''); }}>Log Found</button>
+                <button className={`lnf-tab ${activeTab === 'search' ? 'active' : ''}`} onClick={() => { setActiveTab('search'); setMessage(''); }}>Search</button>
             </div>
 
             <div className="lnf-content">
                 {message && <div className="status-message">{message}</div>}
+
+                {activeTab === 'notice' && (
+                    <div className="notice-board-view" style={{ backgroundColor: '#0f172a', padding: '20px', borderRadius: '12px', color: 'white' }}>
+                        <h2 style={{ textAlign: 'center', color: '#fbbf24', fontSize: '28px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '20px', borderBottom: '2px solid #334155', paddingBottom: '10px' }}>
+                            🚨 Digital Notice Board: Missing & Found Persons 🚨
+                        </h2>
+                        <div className="lnf-grid">
+                            {items.filter(i => i.category === 'People (Lost Children/Elderly)' && (i.status === 'Searching' || i.status === 'Safe')).length === 0 ? (
+                                <p style={{ textAlign: 'center', width: '100%', fontSize: '18px', color: '#94a3b8' }}>No persons currently reported lost or found.</p>
+                            ) : (
+                                items.filter(i => i.category === 'People (Lost Children/Elderly)' && (i.status === 'Searching' || i.status === 'Safe')).map(person => (
+                                    <div key={person.id} className="notice-card" style={{ background: person.type === 'LOST' ? '#7f1d1d' : '#14532d', border: '2px solid', borderColor: person.type === 'LOST' ? '#ef4444' : '#22c55e', borderRadius: '10px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                                        <div className="notice-header" style={{ padding: '15px', textAlign: 'center', backgroundColor: 'rgba(0,0,0,0.4)', fontWeight: 'bold', fontSize: '20px' }}>
+                                            {person.type === 'LOST' ? 'MISSING PERSON' : 'FOUND PERSON'}
+                                        </div>
+                                        {(person.itemImage || person.itemVideo) && (
+                                            <div className="notice-media" style={{ width: '100%', height: '220px', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                {person.itemVideo ? (
+                                                    <video src={person.itemVideo} controls autoPlay loop style={{ maxHeight: '100%', maxWidth: '100%' }} />
+                                                ) : (
+                                                    <img src={person.itemImage} alt="Person" style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
+                                                )}
+                                            </div>
+                                        )}
+                                        <div className="notice-body" style={{ padding: '15px', flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                            <h3 style={{ margin: '0 0 10px 0', fontSize: '24px', textAlign: 'center' }}>{person.itemName}</h3>
+                                            
+                                            {person.type === 'LOST' ? (
+                                                <>
+                                                    <p style={{ margin: 0 }}><strong>Last Seen:</strong> {person.lastSeenLocation || 'Unknown'}</p>
+                                                    <p style={{ margin: 0 }}><strong>Date:</strong> {person.dateLost}</p>
+                                                    <p style={{ margin: 0, color: '#fca5a5' }}><strong>Please Contact:</strong> {person.contactPhone} ({person.contactName})</p>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <p style={{ margin: 0 }}><strong>Found At:</strong> {person.foundLocation || 'Unknown'}</p>
+                                                    <p style={{ margin: 0 }}><strong>Date:</strong> {person.dateFound}</p>
+                                                    <p style={{ margin: 0, color: '#86efac', fontSize: '18px', fontWeight: 'bold' }}><strong>Collect From:</strong> {person.depositedAt}</p>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                )}
 
                 {activeTab === 'report' && (
                     <form className="lnf-form" onSubmit={handleReportSubmit}>
@@ -268,11 +359,13 @@ export default function LostAndFound() {
                                 <div className="camera-section">
                                     <div className="camera-container">
                                         <video ref={videoRef} autoPlay playsInline muted></video>
+                                        {isRecording && <div style={{position:'absolute', top: 10, right: 10, background: 'red', color: 'white', padding: '5px 10px', borderRadius: '5px', animation: 'pulse-water 1s infinite'}}>Recording...</div>}
                                         <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
                                     </div>
                                     <div className="camera-controls">
                                         <button type="button" className="action-btn switch-cam-btn" onClick={toggleCamera}>🔄 Switch</button>
-                                        <button type="button" className="action-btn capture-btn" onClick={capturePhoto}>📸 Capture</button>
+                                        <button type="button" className="action-btn capture-btn" onClick={capturePhoto} disabled={isRecording}>📸 Capture</button>
+                                        <button type="button" className="action-btn" style={{background:'#d97706', color:'white'}} onClick={startRecording} disabled={isRecording}>🎥 Record 5s Video</button>
                                         <button type="button" className="action-btn cancel-cam-btn" onClick={stopCamera}>Cancel</button>
                                     </div>
                                 </div>
@@ -284,14 +377,18 @@ export default function LostAndFound() {
                                             📁 Upload Image
                                         </label>
                                         <button type="button" className="upload-btn alt-btn" onClick={() => startCamera('report')}>
-                                            📷 Take Picture
+                                            📷 Take Media
                                         </button>
                                     </div>
 
-                                    {reportData.itemImage && (
+                                    {(reportData.itemImage || reportData.itemVideo) && (
                                         <div className="photo-preview-container">
-                                            <img src={reportData.itemImage} alt="Preview" className="image-preview" />
-                                            <button type="button" className="retake-btn" onClick={() => setReportData(prev => ({ ...prev, itemImage: null }))}>Remove Image</button>
+                                            {reportData.itemVideo ? (
+                                                <video src={reportData.itemVideo} controls autoPlay loop className="image-preview" style={{maxHeight:'200px'}} />
+                                            ) : (
+                                                <img src={reportData.itemImage} alt="Preview" className="image-preview" />
+                                            )}
+                                            <button type="button" className="retake-btn" onClick={() => setReportData(prev => ({ ...prev, itemImage: null, itemVideo: null }))}>Remove Media</button>
                                         </div>
                                     )}
                                 </div>
@@ -369,11 +466,13 @@ export default function LostAndFound() {
                                 <div className="camera-section">
                                     <div className="camera-container">
                                         <video ref={videoRef} autoPlay playsInline muted></video>
+                                        {isRecording && <div style={{position:'absolute', top: 10, right: 10, background: 'red', color: 'white', padding: '5px 10px', borderRadius: '5px', animation: 'pulse-water 1s infinite'}}>Recording...</div>}
                                         <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
                                     </div>
                                     <div className="camera-controls">
                                         <button type="button" className="action-btn switch-cam-btn" onClick={toggleCamera}>🔄 Switch</button>
-                                        <button type="button" className="action-btn capture-btn" onClick={capturePhoto}>📸 Capture</button>
+                                        <button type="button" className="action-btn capture-btn" onClick={capturePhoto} disabled={isRecording}>📸 Capture</button>
+                                        <button type="button" className="action-btn" style={{background:'#d97706', color:'white'}} onClick={startRecording} disabled={isRecording}>🎥 Record 5s Video</button>
                                         <button type="button" className="action-btn cancel-cam-btn" onClick={stopCamera}>Cancel</button>
                                     </div>
                                 </div>
@@ -385,14 +484,18 @@ export default function LostAndFound() {
                                             📁 Upload Image
                                         </label>
                                         <button type="button" className="upload-btn alt-btn" onClick={() => startCamera('log')}>
-                                            📷 Take Picture
+                                            📷 Take Media
                                         </button>
                                     </div>
 
-                                    {logData.itemImage && (
+                                    {(logData.itemImage || logData.itemVideo) && (
                                         <div className="photo-preview-container">
-                                            <img src={logData.itemImage} alt="Preview" className="image-preview" />
-                                            <button type="button" className="retake-btn" onClick={() => setLogData(prev => ({ ...prev, itemImage: null }))}>Remove Image</button>
+                                            {logData.itemVideo ? (
+                                                <video src={logData.itemVideo} controls autoPlay loop className="image-preview" style={{maxHeight:'200px'}} />
+                                            ) : (
+                                                <img src={logData.itemImage} alt="Preview" className="image-preview" />
+                                            )}
+                                            <button type="button" className="retake-btn" onClick={() => setLogData(prev => ({ ...prev, itemImage: null, itemVideo: null }))}>Remove Media</button>
                                         </div>
                                     )}
                                 </div>
@@ -423,9 +526,13 @@ export default function LostAndFound() {
                                             <span className={`badge ${item.type}`}>{item.type}</span>
                                             <span className={`status ${item.status.toLowerCase()}`}>{item.status}</span>
                                         </div>
-                                        {item.itemImage && (
+                                        {(item.itemImage || item.itemVideo) && (
                                             <div className="card-image-wrapper">
-                                                <img src={item.itemImage} alt="Item" className="lnf-card-image" />
+                                                {item.itemVideo ? (
+                                                    <video src={item.itemVideo} controls autoPlay loop className="lnf-card-image" style={{maxHeight:'100%'}} />
+                                                ) : (
+                                                    <img src={item.itemImage} alt="Item" className="lnf-card-image" />
+                                                )}
                                             </div>
                                         )}
                                         <h3>{item.itemName}</h3>

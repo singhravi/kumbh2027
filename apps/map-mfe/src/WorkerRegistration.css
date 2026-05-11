@@ -528,3 +528,91 @@
     padding: 2px;
     background: white;
 }
+
+/* --- MOBILE RESPONSIVENESS OVERRIDES --- */
+@media (max-width: 768px) {
+    /* Form grids and rows flex handling */
+    .form-row {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+    
+    .form-group.half, .form-group.full-width {
+        width: 100% !important;
+    }
+
+    /* Container adjustments */
+    .food-vendor-container,
+    .akhara-container,
+    .medical-container,
+    .ration-container,
+    .worker-container,
+    .parking-container,
+    .facilities-container,
+    .laser-container,
+    .lost-found-container,
+    .donation-container {
+        padding: 5px !important;
+    }
+    
+    .form-panel, .list-panel, .camera-section, .pass-panel, .stat-card {
+        padding: 15px !important;
+    }
+
+    /* Grid replacements for mobile */
+    .registry-list, 
+    .parking-grid,
+    .facilities-grid,
+    .workers-list,
+    .tents-grid,
+    .donation-grid,
+    .cases-list,
+    .staff-grid,
+    .lost-items-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Specific headers and layout wraps */
+    .vendor-header,
+    .parking-header,
+    .laser-header,
+    .akhara-header,
+    .facilities-header,
+    .donation-header,
+    .medical-header,
+    .role-toggle,
+    .tab-navigation {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+    }
+
+    .vendor-header h2, .parking-header h2, .laser-header h2 {
+        font-size: 1.25rem !important;
+    }
+
+    /* Buttons row wrapping */
+    .form-actions,
+    .card-actions,
+    .officer-actions,
+    .pass-actions,
+    .btn-group {
+        flex-wrap: wrap !important;
+        flex-direction: column !important;
+    }
+
+    .btn-primary, .btn-secondary, .btn-outline, .btn-approve, .btn-reject, .btn-revise, .btn-blacklist, button {
+        width: 100% !important;
+        margin-bottom: 5px !important;
+    }
+
+    /* Adjust passes specifically */
+    .vendor-pass, .worker-pass, .parking-pass, .medical-pass {
+        width: 100% !important;
+        max-width: 350px !important;
+    }
+    
+    .vendor-pass-wrapper, .worker-pass-wrapper {
+        padding: 10px !important;
+    }
+}

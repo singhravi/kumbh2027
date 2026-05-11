@@ -13,6 +13,7 @@ const FoodVendorRegistration = React.lazy(() => import('map_mfe/FoodVendorRegist
 const MedicalAssistance = React.lazy(() => import('map_mfe/MedicalAssistance'));
 const RationManagement = React.lazy(() => import('map_mfe/RationManagement'));
 const DonationManagement = React.lazy(() => import('map_mfe/DonationManagement'));
+const CrowdManagement = React.lazy(() => import('map_mfe/CrowdManagement'));
 
 function App() {
   const [places, setPlaces] = useState([]);
@@ -27,6 +28,23 @@ function App() {
       .catch(console.error);
   }, []);
 
+  useEffect(() => {
+    const handleNavigate = (e) => {
+      setActiveTab('map');
+      if (e.detail && e.detail.placeName) {
+        const found = places.find(p => 
+           p.name.toLowerCase().includes(e.detail.placeName.toLowerCase()) || 
+           e.detail.placeName.toLowerCase().includes(p.name.toLowerCase())
+        );
+        if (found) {
+          setSelectedPlaceId(found.id);
+        }
+      }
+    };
+    window.addEventListener('navigateToMap', handleNavigate);
+    return () => window.removeEventListener('navigateToMap', handleNavigate);
+  }, [places]);
+
   return (
     <div className="app-container">
       <header className="app-header">
@@ -34,7 +52,7 @@ function App() {
         <p>Immersive AI Interactive Guide</p>
       </header>
 
-      <div className="tabs-nav" style={{ display: 'flex', gap: '10px', padding: '10px 20px', background: '#fff', borderBottom: '1px solid #eee', overflowX: 'auto', whiteSpace: 'nowrap' }}>
+      <div className="tabs-nav" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', padding: '10px 20px', background: '#fff', borderBottom: '1px solid #eee' }}>
         <button
           className={`tab-btn ${activeTab === 'map' ? 'active' : ''}`}
           onClick={() => setActiveTab('map')}
@@ -111,6 +129,13 @@ function App() {
           style={{ padding: '10px 20px', cursor: 'pointer', background: activeTab === 'donation' ? '#6d28d9' : '#f0f0f0', color: activeTab === 'donation' ? 'white' : 'black', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}
         >
           Donations
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 'crowd' ? 'active' : ''}`}
+          onClick={() => setActiveTab('crowd')}
+          style={{ padding: '10px 20px', cursor: 'pointer', background: activeTab === 'crowd' ? '#ffaa00' : '#f0f0f0', color: activeTab === 'crowd' ? 'white' : 'black', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}
+        >
+          Crowd Control
         </button>
       </div>
 
@@ -222,6 +247,14 @@ function App() {
           <section className="donation-view" style={{ flex: 1, padding: '20px', overflowY: 'auto', backgroundColor: '#f8fafc' }}>
             <Suspense fallback={<div className="loading-donation">Loading Donation Portal...</div>}>
               <DonationManagement />
+            </Suspense>
+          </section>
+        )}
+
+        {activeTab === 'crowd' && (
+          <section className="crowd-view" style={{ flex: 1, overflowY: 'auto', backgroundColor: '#e2e8f0' }}>
+            <Suspense fallback={<div className="loading-crowd">Loading Crowd Dashboard...</div>}>
+              <CrowdManagement />
             </Suspense>
           </section>
         )}

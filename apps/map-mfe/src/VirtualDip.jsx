@@ -19,12 +19,14 @@ export default function VirtualDip({ onComplete }) {
     const capture = useCallback(() => {
         const imageSrc = webcamRef.current.getScreenshot();
         setImgSrc(imageSrc);
-        setDipState('walking');
+        setDipState('starting');
     }, [webcamRef, setImgSrc]);
 
     useEffect(() => {
-        if (dipState === 'walking') {
-            setTimeout(() => setDipState('dipping'), 2500); // Walk for 2.5s
+        if (dipState === 'starting') {
+            setTimeout(() => setDipState('walking-down'), 1000); // Wait 1s at top
+        } else if (dipState === 'walking-down') {
+            setTimeout(() => setDipState('dipping'), 3000); // Walk down for 3s
         } else if (dipState === 'dipping') {
             if (audioRef.current) {
                 audioRef.current.play(); // Play splash
@@ -86,9 +88,11 @@ export default function VirtualDip({ onComplete }) {
                 window.speechSynthesis.speak(chant);
             }
 
-            setTimeout(() => setDipState('emerging'), 3000); // Dip for 3s
+            setTimeout(() => setDipState('emerging'), 4000); // Dip for 4s
         } else if (dipState === 'emerging') {
-            setTimeout(() => setDipState('done'), 2000); // Emerge and show blessing
+            setTimeout(() => setDipState('walking-up'), 1000); // Wait 1s post emergence
+        } else if (dipState === 'walking-up') {
+            setTimeout(() => setDipState('done'), 3000); // Walk up for 3s
         }
     }, [dipState, gender]);
 
@@ -130,16 +134,14 @@ export default function VirtualDip({ onComplete }) {
 
             {dipState !== 'capture' && (
                 <div className="dip-simulation-screen">
-                    <video
-                        className="background-river-video"
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                    >
-                        {/* Using a placeholder river video */}
-                        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
-                    </video>
+                    <div className="ghat-background">
+                        <div className="sky"></div>
+                        <div className="mountains"></div>
+                        <div className="temple-silhouette"></div>
+                    </div>
+
+                    <div className="ghat-stairs"></div>
+                    <div className="river-water"></div>
 
                     <audio ref={audioRef} src="https://cdn.freesound.org/previews/416/416179_5121236-lq.mp3" />
 
@@ -147,9 +149,6 @@ export default function VirtualDip({ onComplete }) {
                     <div className={`user-avatar ${dipState}`}>
                         <img src={imgSrc} alt="Pilgrim" />
                     </div>
-
-                    {/* Water overlay for immersion */}
-                    <div className={`water-overlay ${dipState}`}></div>
 
                     {dipState === 'done' && (
                         <div className="blessing-message">

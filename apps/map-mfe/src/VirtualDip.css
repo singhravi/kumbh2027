@@ -57,29 +57,78 @@
     overflow: hidden;
 }
 
-.background-river-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+/* Background environment for Har Ki Pauri */
+.ghat-background {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, #fb923c, #fef08a 60%, #e0f2fe);
     z-index: 1;
-    filter: brightness(0.7);
 }
 
-.user-avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    overflow: hidden;
+.mountains {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 30%; left: 0; width: 100%; height: 40%;
+    background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 20" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,20 L0,10 L10,5 L20,15 L35,2 L55,18 L70,8 L85,14 L100,0 L100,20 Z" fill="%23d6d3d1" opacity="0.6"/></svg>');
+    background-size: cover;
+    z-index: 2;
+}
+
+.temple-silhouette {
+    position: absolute;
+    bottom: 35%; right: 5%; width: 60px; height: 80px;
+    background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 50 80" xmlns="http://www.w3.org/2000/svg"><path d="M25,0 L10,30 L10,80 L40,80 L40,30 Z" fill="%2378350f" opacity="0.8"/><circle cx="25" cy="15" r="5" fill="%23f59e0b"/></svg>');
+    background-repeat: no-repeat;
+    z-index: 3;
+}
+
+.ghat-stairs {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 60%;
+    height: 50%;
+    background: repeating-linear-gradient(
+        to bottom,
+        #d6d3d1,
+        #d6d3d1 15px,
+        #a8a29e 15px,
+        #a8a29e 20px
+    );
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    z-index: 4;
+}
+
+.river-water {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 35%;
+    background: linear-gradient(270deg, #0284c7, #38bdf8, #0ea5e9, #0284c7);
+    background-size: 400% 100%;
+    animation: riverFlow 3s ease infinite;
     z-index: 5;
+    opacity: 0.9;
+    border-top: 4px dashed rgba(255, 255, 255, 0.4);
+}
+
+@keyframes riverFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* User Avatar States */
+.user-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: absolute;
+    overflow: hidden;
+    z-index: 6; 
     border: 3px solid white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-    transition: all 1s ease-in-out;
+    transition: all 0s; /* Instant transitions during capture setup, specific classes override */
 }
 
 .user-avatar img {
@@ -88,60 +137,70 @@
     object-fit: cover;
 }
 
-/* Animation states for Avatar */
-.user-avatar.walking {
-    bottom: 20px;
-    transform: translateX(-50%) scale(1);
+/* 1. Starting at top of stairs */
+.user-avatar.starting {
+    right: 15%;
+    bottom: 40%;
+    transform: scale(0.6);
 }
 
+/* 2. Walking down to water */
+.user-avatar.walking-down {
+    right: 55%;
+    bottom: 18%;
+    transform: scale(0.7);
+    transition: all 3s linear;
+    animation: walkBob 0.5s infinite alternate;
+}
+
+/* 3. Dipping */
 .user-avatar.dipping {
-    bottom: -40px;
-    /* Moves down into the "water" */
-    transform: translateX(-50%) scale(0.8);
-    filter: blur(2px) sepia(0.3) hue-rotate(180deg);
+    right: 60%;
+    bottom: 5%; /* In water */
+    transform: scale(0.7);
+    transition: all 1s ease-in-out;
+    animation: dipBob 1.5s infinite alternate;
+    z-index: 4; /* Submerge behind the water gradient slightly */
+    opacity: 0.8;
+    filter: blur(1px) sepia(0.3) saturate(2);
 }
 
+/* 4. Emerging */
 .user-avatar.emerging {
-    bottom: 40px;
-    transform: translateX(-50%) scale(1.1);
-    filter: blur(0) drop-shadow(0 0 10px cyan);
+    right: 55%;
+    bottom: 18%;
+    transform: scale(0.7);
+    transition: all 1s ease-in-out;
+    z-index: 6;
+    opacity: 1;
+    filter: none;
 }
 
+/* 5. Walking Up */
+.user-avatar.walking-up {
+    right: 15%;
+    bottom: 40%;
+    transform: scale(0.6);
+    transition: all 3s linear;
+    animation: walkBob 0.5s infinite alternate;
+}
+
+/* 6. Done */
 .user-avatar.done {
-    bottom: 40px;
-    transform: translateX(-50%) scale(1);
+    right: 15%;
+    bottom: 40%;
+    transform: scale(0.6);
+    filter: drop-shadow(0 0 15px cyan);
 }
 
-/* Immersive water overlay */
-.water-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 30%;
-    background: linear-gradient(to top, rgba(14, 165, 233, 0.8), transparent);
-    z-index: 4;
-    pointer-events: none;
+@keyframes walkBob {
+    from { margin-bottom: 0; }
+    to { margin-bottom: 15px; }
 }
 
-.water-overlay.dipping {
-    height: 80%;
-    /* Water level "rises" */
-    animation: pulse-water 1.5s infinite;
-}
-
-@keyframes pulse-water {
-    0% {
-        transform: scaleY(1);
-    }
-
-    50% {
-        transform: scaleY(1.1);
-    }
-
-    100% {
-        transform: scaleY(1);
-    }
+@keyframes dipBob {
+    from { transform: scale(0.7) translateY(0); }
+    to { transform: scale(0.65) translateY(40px); }
 }
 
 .blessing-message {
@@ -163,13 +222,8 @@
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .blessing-message h2 {
